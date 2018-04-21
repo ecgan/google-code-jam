@@ -125,4 +125,8 @@ function main() {
   parse()
 }
 
-main()
+if (!module.parent) { 
+  main() 
+} 
+ 
+module.exports = solve 

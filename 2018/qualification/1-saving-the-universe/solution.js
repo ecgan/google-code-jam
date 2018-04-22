@@ -29,7 +29,6 @@ class CaseParser {
   }
 }
 
-// call parse() to read the inputs and return list of problems / test cases. 
 function parse() {
   const readline = require('readline');
   let t = 0;
@@ -59,12 +58,6 @@ function parse() {
           caseParser = new CaseParser()
         }
 
-        // let values = line.split(' ')
-        // let prob = new Problem()
-        // prob.damage = parseInt(values[0])
-        // prob.sequence = Array.from(values[1])
-        // probs.push(prob)
-        // currentT += 1
         break
       }
     }

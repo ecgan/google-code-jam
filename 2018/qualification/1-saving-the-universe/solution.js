@@ -2,6 +2,33 @@
 
 //////////////
 
+class CaseParser {
+  constructor() {
+    this.damage = 0
+    this.sequence = []
+    this.state = '1'
+  }
+
+  readline(line) {
+    let values = line.split(' ')
+    this.damage = parseInt(values[0])
+    this.sequence = Array.from(values[1])
+
+    this.state = 'done'
+  }
+
+  isComplete() {
+    return (this.state === 'done')
+  }
+
+  getCase() {
+    return {
+      damage: this.damage,
+      sequence: this.sequence
+    }
+  }
+}
+
 // call parse() to read the inputs and return list of problems / test cases. 
 function parse() {
   const readline = require('readline');
@@ -9,6 +36,7 @@ function parse() {
   let currentT = 0;
   let readState = 't'
   let probs = []
+  let caseParser = new CaseParser()
 
   const rl = readline.createInterface({
     input: process.stdin,
@@ -23,12 +51,20 @@ function parse() {
         break
       }
       case 'case': {
-        let values = line.split(' ')
-        let prob = new Problem()
-        prob.damage = parseInt(values[0])
-        prob.sequence = Array.from(values[1])
-        probs.push(prob)
-        currentT += 1
+        caseParser.readline(line)
+
+        if (caseParser.isComplete()) {
+          probs.push(caseParser.getCase())
+          currentT += 1
+          caseParser = new CaseParser()
+        }
+
+        // let values = line.split(' ')
+        // let prob = new Problem()
+        // prob.damage = parseInt(values[0])
+        // prob.sequence = Array.from(values[1])
+        // probs.push(prob)
+        // currentT += 1
         break
       }
     }
@@ -108,7 +144,7 @@ function calculateMinSwap(prob) {
 
       strengths[lastC + 1] = strengths[lastC]
       strengths[lastC] = strengths[lastC] / 2
-      
+
       lastC += 1
       minSwap += 1
       currentTotalDamage = calculateTotalDamage(prob, strengths)
@@ -156,8 +192,8 @@ function main() {
   parse()
 }
 
-if (!module.parent) { 
-  main() 
-} 
- 
+if (!module.parent) {
+  main()
+}
+
 module.exports = solve 

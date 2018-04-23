@@ -73,7 +73,7 @@ class ProblemParser {
   }
 }
 
-function proc(probs) {
+function processCases(probs) {
   for (let index = 0; index < probs.length; index++) {
     const result = solve(probs[index]);
     console.log(`Case #${index + 1}: ${result}`)
@@ -192,7 +192,7 @@ function main() {
       rl.close()
     }
   }).on('close', () => {
-      proc(problemParser.getCases())
+      processCases(problemParser.getCases())
     }
   )
 }

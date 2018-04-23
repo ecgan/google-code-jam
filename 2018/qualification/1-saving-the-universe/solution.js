@@ -29,13 +29,53 @@ class CaseParser {
   }
 }
 
+class ProblemParser {
+  constructor() {
+    this.t = 0
+    this.currentT = 0
+    this.cases = []
+    this.caseParser = new CaseParser()
+    this.state = 't'
+  }
+
+  readline(line) {
+    switch (this.state) {
+      case 't': {
+        this.t = parseInt(line)
+        this.state = 'case'
+        break
+      }
+    
+      case 'case': {
+        this.caseParser.readline(line)
+
+        if (this.caseParser.isComplete()) {
+          this.cases.push(this.caseParser.getCase())
+          this.currentT += 1
+          this.caseParser = new CaseParser()
+        }
+
+        break
+      }
+    }
+
+    if (this.currentT === this.t) {
+      this.state = 'done'
+    }
+  }
+
+  isComplete() {
+    return (this.state === 'done')
+  }
+
+  getCases() {
+    return this.cases
+  }
+}
+
 function parse() {
   const readline = require('readline');
-  let t = 0;
-  let currentT = 0;
-  let readState = 't'
-  let probs = []
-  let caseParser = new CaseParser()
+  const problemParser = new ProblemParser()
 
   const rl = readline.createInterface({
     input: process.stdin,
@@ -43,32 +83,15 @@ function parse() {
   });
 
   rl.on('line', (line) => {
-    switch (readState) {
-      case 't': {
-        t = parseInt(line)
-        readState = 'case'
-        break
-      }
-      case 'case': {
-        caseParser.readline(line)
+    problemParser.readline(line)
 
-        if (caseParser.isComplete()) {
-          probs.push(caseParser.getCase())
-          currentT += 1
-          caseParser = new CaseParser()
-        }
-
-        break
-      }
-    }
-
-    if (currentT === t) {
+    if (problemParser.isComplete()) {
       rl.close()
     }
-  })
-    .on('close', () => {
-      proc(probs)
-    })
+  }).on('close', () => {
+      proc(problemParser.getCases())
+    }
+  )
 }
 
 function proc(probs) {
@@ -170,13 +193,6 @@ function isImposible(prob) {
     return true
   }
   return false
-}
-
-////////////////////////
-
-function Problem() {
-  this.damage = 0
-  this.sequence = []
 }
 
 //////////////

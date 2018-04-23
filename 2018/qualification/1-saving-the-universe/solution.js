@@ -73,27 +73,6 @@ class ProblemParser {
   }
 }
 
-function parse() {
-  const readline = require('readline');
-  const problemParser = new ProblemParser()
-
-  const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-  });
-
-  rl.on('line', (line) => {
-    problemParser.readline(line)
-
-    if (problemParser.isComplete()) {
-      rl.close()
-    }
-  }).on('close', () => {
-      proc(problemParser.getCases())
-    }
-  )
-}
-
 function proc(probs) {
   for (let index = 0; index < probs.length; index++) {
     const result = solve(probs[index]);
@@ -198,7 +177,24 @@ function isImposible(prob) {
 //////////////
 
 function main() {
-  parse()
+  const readline = require('readline');
+  const problemParser = new ProblemParser()
+
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+  });
+
+  rl.on('line', (line) => {
+    problemParser.readline(line)
+
+    if (problemParser.isComplete()) {
+      rl.close()
+    }
+  }).on('close', () => {
+      proc(problemParser.getCases())
+    }
+  )
 }
 
 if (!module.parent) {

@@ -9,6 +9,7 @@ class InteractiveCaseParser {
     this.N = 0
     this.currentN = 0
     this.flavors = []
+    this.history = []
     this.sold = []
     
     this.state = 'N'
@@ -23,6 +24,7 @@ class InteractiveCaseParser {
     switch (this.state) {
       case 'N': {
         this.N = parseInt(line)
+        this.history = Array(this.N).fill(0)
         this.state = 'D'
         break
       }
@@ -35,7 +37,16 @@ class InteractiveCaseParser {
           .map(c => parseInt(c))
         this.flavors.push(flavors)
 
-        this.respond(flavors)
+        flavors.forEach((f) => { 
+          this.history[f] += 1 
+        }) 
+ 
+        let result = this.respond(flavors) 
+        if (result >= 0) { 
+          this.sold.push(result) 
+        } 
+
+        console.log(result)
 
         this.currentN += 1
 
@@ -48,16 +59,46 @@ class InteractiveCaseParser {
   }
 
   respond(flavors) {
-    // console.log(flavors)
-    
-    // logic here
-    // write to console.log here
+    // customer likes nothing.  
+    // no flavor to sell. 
     if (flavors.length === 0) {
-      console.log(-1)
-      return 
+      return -1
     }
 
-    console.log(2)
+    const unsoldFlavors = flavors.filter(f => !this.sold.includes(f)) 
+ 
+    // all sold out, returns -1. 
+    if (unsoldFlavors.length === 0) { 
+      return -1 
+    }
+
+    // only one choice to sell. 
+    if (unsoldFlavors.length === 1) { 
+      return unsoldFlavors[0] 
+    }
+
+    // multiple unsold flavors.
+    // choose the one that is least requested in history.
+    // if there is a tie in request count, 
+    // choose the last flavor. 
+    let chosen = unsoldFlavors.map((f) => {
+      return {
+        flavor: f,
+        count: this.history[f]
+      }
+    })
+    .reduce((acc, cur) => {
+      if (cur.count <= acc.count) {
+        return cur
+      }
+
+      return acc
+    }, { 
+      flavor: -1,
+      count: 1000
+    })
+  
+    return chosen.flavor
   }
 
   isComplete() {
@@ -152,5 +193,3 @@ if (!module.parent) {
 module.exports = {
   InteractiveCaseParser
 }
-
-main()

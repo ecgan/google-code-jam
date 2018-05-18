@@ -257,5 +257,6 @@ if (!module.parent) {
 }
 
 module.exports = {
-  InteractiveCaseParser
+  InteractiveCaseParser,
+  InteractiveCaseSolver
 }

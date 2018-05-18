@@ -41,26 +41,27 @@ if (!Array.prototype.includes) {
 }
 
 //
-// InteractiveCaseParser
+// InteractiveCaseSolver
 //
-class InteractiveCaseParser {
-  constructor(caseNumber) {
-    this.caseNo = caseNumber
+class InteractiveCaseSolver {
+  constructor() {
     this.N = 0
-    this.currentN = 0
-    this.flavors = []
-    this.history = []
-    this.sold = []
+
+    // stores all customer-requested flavors. 
+    // [customer: [flavors]]
+    this.flavors = [] 
     
+    // stores the flavor id and requested count. 
+    // index is flavor id, and value is count. 
+    this.history = []
+
+    // stores the flavors that has been sold, hence not available.
+    this.sold = []
+
     this.state = 'N'
   }
 
   readline(line) {
-    if (line === '-1') {
-      this.state = 'fail'
-      return
-    }
-
     switch (this.state) {
       case 'N': {
         this.N = parseInt(line)
@@ -80,25 +81,13 @@ class InteractiveCaseParser {
         flavors.forEach((f) => { 
           this.history[f] += 1 
         }) 
- 
-        let result = this.respond(flavors) 
-        if (result >= 0) { 
-          this.sold.push(result) 
-        } 
-
-        console.log(result)
-
-        this.currentN += 1
-
-        if (this.currentN === this.N) {
-          this.state = 'done'
-        }
-        break
       }
     }
   }
 
-  respond(flavors) {
+  solve() {
+    let flavors = this.flavors[this.flavors.length - 1]
+
     // customer likes nothing.  
     // no flavor to sell. 
     if (flavors.length === 0) {
@@ -114,7 +103,9 @@ class InteractiveCaseParser {
 
     // only one choice to sell. 
     if (unsoldFlavors.length === 1) { 
-      return unsoldFlavors[0] 
+      let result = unsoldFlavors[0] 
+      this.sold.push(result)
+      return result
     }
 
     // multiple unsold flavors.
@@ -138,15 +129,59 @@ class InteractiveCaseParser {
       count: 1000
     })
   
-    return chosen.flavor
+    let result = chosen.flavor
+    this.sold.push(result)
+    return result
+  }
+}
+
+//
+// InteractiveCaseParser
+//
+class InteractiveCaseParser {
+  constructor(caseNumber) {
+    this.caseNo = caseNumber
+    this.N = 0
+    this.currentN = 0
+
+    this.solver = new InteractiveCaseSolver()
+    
+    this.state = 'N'
   }
 
-  isComplete() {
-    return (this.state === 'done')
-  }
+  readline(line) {
+    // judge says something is wrong.
+    // set case to fail and return.
+    if (line === '-1') {
+      this.state = 'fail'
+      return
+    }
 
-  isFailed() {
-    return (this.state === 'fail')
+    switch (this.state) {
+      case 'N': {
+        this.N = parseInt(line)
+
+        this.solver.readline(line)
+
+        this.state = 'D'
+        break
+      }
+
+      case 'D': {
+        this.solver.readline(line)
+
+        const result = this.solver.solve()
+        
+        console.log(result)
+
+        this.currentN += 1
+
+        if (this.currentN === this.N) {
+          this.state = 'done'
+        }
+        break
+      }
+    }
   }
 }
 
@@ -157,7 +192,6 @@ class ProblemParser {
   constructor() {
     this.T = 0
     this.currentT = 0
-    this.cases = []
     this.caseParser = new InteractiveCaseParser(1)
     this.state = 'T'
   }
@@ -173,12 +207,12 @@ class ProblemParser {
       case 'case': {
         this.caseParser.readline(line)
 
-        if (this.caseParser.isFailed()) {
+        if (this.caseParser.state === 'fail') {
           this.state = 'fail'
           return
         }
 
-        if (this.caseParser.isComplete()) {
+        if (this.caseParser.state === 'done') {
           this.currentT += 1
           this.caseParser = new InteractiveCaseParser(this.currentT + 1)
         }
@@ -190,14 +224,6 @@ class ProblemParser {
     if (this.currentT === this.T) {
       this.state = 'done'
     }
-  }
-
-  isComplete() {
-    return (this.state === 'done')
-  }
-
-  isFail() {
-    return (this.state === 'fail')
   }
 }
 
@@ -216,7 +242,7 @@ function main() {
   rl.on('line', (line) => {
     problemParser.readline(line)
 
-    if (problemParser.isComplete() || problemParser.isFail()) {
+    if (problemParser.state === 'done' || problemParser.state === 'fail') {
       rl.close()
     }
   })

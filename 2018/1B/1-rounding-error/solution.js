@@ -213,6 +213,7 @@ function main() {
     }
   }).on('close', () => {
       processCases(problemParser.getCases())
+      process.exit(0)
     }
   )
 }

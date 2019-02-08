@@ -1,0 +1,6 @@
+{
+  "license" : "MIT",
+  "scripts": {
+    "test": "python testing_tool.py node solution.js"
+  }
+}

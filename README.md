@@ -15,13 +15,10 @@ If you encounter any issue or have any question, feel free to open a GitHub issu
 ### Round 1B
 
 * [Rounding Error](2018/1B/1-rounding-error)
-* [Mysterious Road Signs](2018/1B/2-mysterious-road-signs)
 
 ### Round 1A
 
 * [Waffle Choppers](2018/1A/1-waffle-choppers)
-* [Bit Party](2018/1A/1-bit-party)
-* [Edgy Baking](2018/1A/1-edgy-baking)
 
 ### Qualification
 

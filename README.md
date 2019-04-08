@@ -6,6 +6,13 @@ All solutions are in its respective folder. They are tested and passed with perf
 
 If you encounter any issue or have any question, feel free to open a GitHub issue.
 
+## 2019
+
+### Qualification Round
+
+* [Foregone Solution](2019/qualification/1-foregone-solution)
+* [You Can Go Your Own Way](2019/qualification/2-you-can-go-your-own-way)
+
 ## 2018
 
 ### Round 1C
@@ -20,7 +27,7 @@ If you encounter any issue or have any question, feel free to open a GitHub issu
 
 * [Waffle Choppers](2018/1A/1-waffle-choppers)
 
-### Qualification
+### Qualification Round
 
 * [Saving the Universe](2018/qualification/1-saving-the-universe)
 * [Trouble Sort](2018/qualification/2-trouble-sort)

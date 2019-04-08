@@ -1,0 +1,33 @@
+{
+  "name": "foregone-solution",
+  "version": "1.0.0",
+  "description": "Solution for Google Code Jam 2019 Qualification Round problem, Foregone Solution.",
+  "main": "solution.js",
+  "devDependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.3.3",
+    "@babel/preset-env": "^7.3.1",
+    "eslint": "^5.14.0",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-plugin-import": "^2.16.0",
+    "eslint-plugin-jest": "^22.3.0",
+    "eslint-plugin-node": "^8.0.1",
+    "eslint-plugin-promise": "^4.0.1",
+    "eslint-plugin-standard": "^4.0.0",
+    "jest": "^24.1.0",
+    "rollup": "^1.6.0",
+    "rollup-plugin-babel": "^4.3.2",
+    "rollup-plugin-node-resolve": "^4.0.1"
+  },
+  "scripts": {
+    "start": "node build/solution.js",
+    "test": "BABEL_ENV=test jest --watchAll",
+    "build": "BABEL_ENV=build rollup -c"
+  },
+  "keywords": [
+    "google code jam",
+    "foregone solution"
+  ],
+  "author": "Gan Eng Chin",
+  "license": "MIT"
+}
